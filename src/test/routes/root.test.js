@@ -2,27 +2,27 @@
 
 const { test } = require('node:test')
 const assert = require('node:assert')
-const { build } = require('../server')
+const { build } = require('../server.js')
 
-test('example is loaded', async (t) => {
+test('default root route', async (t) => {
   const app = await build(t)
 
   const res = await app.inject({
-    url: '/example'
+    url: '/'
   })
-  assert.equal(res.payload, 'this is an example')
+  assert.deepStrictEqual(JSON.parse(res.payload), { root: true })
 })
 
 // inject callback style:
 //
-// test('example is loaded', (t) => {
+// test('default root route', (t) => {
 //   t.plan(2)
 //   const app = await build(t)
 //
 //   app.inject({
-//     url: '/example'
+//     url: '/'
 //   }, (err, res) => {
 //     t.error(err)
-//     assert.equal(res.payload, 'this is an example')
+//     assert.deepStrictEqual(JSON.parse(res.payload), { root: true })
 //   })
 // })
