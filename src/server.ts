@@ -2,11 +2,11 @@
 import Fastify, { FastifyInstance, RawRequestDefaultExpression } from 'fastify'
 import AutoLoad from '@fastify/autoload'
 import { fileURLToPath } from 'url';
-import dbPlugin from "./src/plugins/dbPlugin";
+import dbPlugin from "./plugins/dbPlugin";
 import path from 'path';
 import 'dotenv/config';
 
-const __dirname = `${path.dirname(fileURLToPath(import.meta.url))}/src`;
+const __dirname = `${path.dirname(fileURLToPath(import.meta.url))}`;
 const config = {
     logger: true,
     ignoreTrailingSlash: true,

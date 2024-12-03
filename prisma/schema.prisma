@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          Int      @id @default(autoincrement())
+  username    String @unique
+  description String?  @db.VarChar(255)
+  avatar      String?
+  role        String
+  email       String @unique
+  password    String @unique
+  created_at  DateTime @default(now())
+
+  comments    Comments[]
+  profile     Profiles?  @relation("UserProfile")
+}
+
+model Comments {
+  id         Int      @id @default(autoincrement())
+  author_id  Int
+  profile_id Int
+  body       String @db.VarChar(255)
+  created_at DateTime @default(now())
+  author    Users      @relation(fields: [author_id], references: [id])
+  profile   Profiles   @relation(fields: [profile_id], references: [id])
+}
+
+model Profiles {
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @unique
+  rating      Int      @default(0)
+  price_st    Int
+  price_lt    Int
+  price_night Int
+  visit_to_st Boolean
+  visit_to_lt Boolean
+  created_at DateTime @default(now())
+
+  user        Users           @relation("UserProfile", fields: [user_id], references: [id])
+  images ProfilePhotos[]
+  comments Comments[]
+  options   Options[]  @relation("ProfileOptions")
+}
+
+model ProfilePhotos {
+  id         Int      @id @default(autoincrement())
+  profile_id Int
+  image_url  String
+  created_at DateTime @default(now())
+
+  profile   Profiles   @relation(fields: [profile_id], references: [id])
+}
+
+model Options {
+  id         Int      @id @default(autoincrement())
+  option     String
+  type       String
+  enable     Boolean
+  created_at DateTime @default(now())
+
+  profile Profiles[] @relation("ProfileOptions")
+}
+

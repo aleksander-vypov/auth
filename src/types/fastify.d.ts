@@ -1,8 +1,8 @@
-import { Knex } from 'knex';
+import {PrismaClient} from '@prisma/client';
 import 'fastify'
 
 declare module 'fastify' {
     interface FastifyInstance {
-        knex: Knex;
+        prisma: PrismaClient;
     }
 }
